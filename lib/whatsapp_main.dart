@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp_klon/core/services/locator.dart';
 import 'package:whatsapp_klon/screens/calls_page.dart';
 import 'package:whatsapp_klon/screens/camera_page.dart';
 import 'package:whatsapp_klon/screens/chats_page.dart';
 import 'package:whatsapp_klon/screens/status_page.dart';
+import 'package:whatsapp_klon/viewmodel/main_model.dart';
 
 class WhatsappMain extends StatefulWidget {
   @override
@@ -25,44 +27,77 @@ class _WhatsappMainState extends State<WhatsappMain>
 
   @override
   Widget build(BuildContext context) {
+    var model = getIt<MainModel>();
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return SliverAppBar(
-            floating: true,
-            snap: true,
-            
-            title: Text('Whatsapp Clone'),
-            bottom: TabBar(
-              controller: _tabController,
-              tabs: [
-                Tab(
-                    icon: Icon(
-                  Icons.camera,
-                )),
-                Tab(
-                  text: "Chats",
+      body: Container(
+        color: Theme.of(context).primaryColor,
+        child: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  floating: true,
+                  title: Text("Whatsapp Clone"),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.more_vert),
+                      onPressed: () {},
+                    ),
+                  ],
+                )
+              ];
+            },
+            body: Column(
+              children: <Widget>[
+                Container(
+                  color: Theme.of(context).primaryColor,
+                  child: TabBar(
+                    controller: _tabController,
+                    tabs: <Widget>[
+                      Tab(
+                        icon: Icon(Icons.camera),
+                      ),
+                      Tab(
+                        text: "Chats",
+                      ),
+                      Tab(text: "Status"),
+                      Tab(text: "Calls"),
+                    ],
+                  ),
                 ),
-                Tab(
-                  text: "Status",
-                ),
-                Tab(
-                  text: "Calls",
+                Expanded(
+                  child: Container(
+                    color: Colors.white,
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: <Widget>[
+                        CameraPage(),
+                        ChatsPage(),
+                        StatusPage(),
+                        CallsPage(),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-          );
-        },
+          ),
+        ),
       ),
-      /*TabBarView(
-        controller: _tabController,
-        children: [CameraPage(), ChatsPage(), StatusPage(), CallsPage()],
-      ),*/
       floatingActionButton: _showMessage
           ? FloatingActionButton(
-              child: Icon(Icons.message),
-              onPressed: () {},
-            )
+              child: Icon(
+                Icons.message,
+                color: Colors.white,
+              ),
+              onPressed: () async {
+                await model.navigateToContacts();
+              })
           : null,
     );
   }
