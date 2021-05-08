@@ -9,38 +9,47 @@ import 'package:whatsapp_klon/viewmodel/sign_in_model.dart';
 class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final TextEditingController name = TextEditingController();
-  
+    final TextEditingController _textEditingController =
+        TextEditingController();
+
     return ChangeNotifierProvider(
-        create: (BuildContext context) => getIt<SignInModel>(),
-        child: Consumer<SignInModel>(
-          builder: (BuildContext context, SignInModel model, Widget child) {
-            Scaffold(
-              appBar: AppBar(
-                title: Text("Sıgn In for Whatsapp Clone"),
-              ),
-              body: Container(
-                padding: EdgeInsets.all(8),
+      create: (BuildContext context) => getIt<SignInModel>(),
+      child: Consumer<SignInModel>(
+        builder: (context, model, widget) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("Sign In to Whatsapp Clone"),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
                 child: model.busy
                     ? CircularProgressIndicator()
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("User Name"),
+                        children: <Widget>[
+                          Text('User Name'),
                           TextField(
-                            controller: name,
+                            controller: _textEditingController,
                           ),
-                          RaisedButton(
-                              child: Text("Sign In"),
-                              onPressed: () async {
-                                await model.signIn(name.text);
-                              
-                              })
+                          model.busy
+                              ? CircularProgressIndicator()
+                              : RaisedButton(
+                                  color: Theme.of(context).primaryColor,
+                                  child: Text(
+                                    'Sing In',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: () async => await model
+                                      .signIn(_textEditingController.text),
+                                )
                         ],
                       ),
               ),
-            );
-          },
-        ));
+            ),
+          );
+        },
+      ),
+    );
   }
 }

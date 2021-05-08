@@ -4,6 +4,7 @@ import 'package:whatsapp_klon/models/profile.dart';
 import 'package:whatsapp_klon/viewmodel/contacts_model.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:whatsapp_klon/viewmodel/sign_in_model.dart';
 class ContactsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class ContactList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = getIt<ContactsModel>();
-  var user=Provider.of<User>(context);
+  var user=Provider.of<SignInModel>(context).currentUser;
     return FutureBuilder(
         future: model.getContantacts(query),
         builder: (BuildContext context, AsyncSnapshot<List<Profile>> snapshot) {
@@ -112,6 +113,7 @@ class ContactSearchDelegate extends SearchDelegate {
         });
   }
 
+ 
   @override
   Widget buildResults(BuildContext context) {
     return ContactList(
@@ -121,6 +123,11 @@ class ContactSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container();
+    return Center(
+      child: Text(
+        "Search to start conversation",
+      ),
+    );
   }
+
 }

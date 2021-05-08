@@ -9,13 +9,14 @@ import 'package:whatsapp_klon/screens/converstaion_page.dart';
 import 'package:whatsapp_klon/viewmodel/chats_model.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:whatsapp_klon/viewmodel/sign_in_model.dart';
 
 class ChatsPage extends StatelessWidget {
   //final String userid = "XR22RpiceqWlo10yF2Sbhpn5Fno1";
   @override
   Widget build(BuildContext context) {
     var model = GetIt.instance<ChatsModel>();
-    var user = Provider.of<User>(context);
+    var user = Provider.of<SignInModel>(context).currentUser;
     return ChangeNotifierProvider(
       create: (BuildContext context) => model,
       child: StreamBuilder(
